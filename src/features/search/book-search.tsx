@@ -1,27 +1,25 @@
 import { useState } from "react"
-const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
-const apiUrl = import.meta.env.VITE_GOOGLE_BOOKS_URL;
-
-interface Book {
-    title: string;
-    key: string;
-}
+import { type Book, DocsSchema } from "../../types/book.schema"
+import z from "zod";
 
 export function BookSearch() {
     const [query, setQuery] = useState('');
-    const [booksData, setBooksData] = useState<Array<Book>>([]);
+    const [booksData, setBooksData] = useState<Book[]>([]);
 
     async function searchBooks() {
         try {
-            const data = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`)
-            if (!data.ok) {
-                throw new Error(`Response status: ${data.status}`);
+            const response = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`)
+            if (!response.ok) {
+                throw new Error(`Statut de la réponse : ${response.status}`);
             }
-            const result = await data.json();
-            setBooksData(result.docs);
+            const result = await response.json();
+            const books = DocsSchema.parse(result);
+            setBooksData(books.docs);
         } catch (error: unknown) {
-            if(error instanceof Error) {
+            if (error instanceof Error) {
                 console.error(error.message);
+            } else if (error instanceof z.ZodError) {
+                console.error("La validation a échouée", error.issues);
             } else {
                 console.error("Une erreur est survenue lors du chargement des livres veuillez réessayer plus tard.");
             }

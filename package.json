@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "npx tsc --noEmit -p tsconfig.app.json",
+    "typecheck:watch": "npx tsc --noEmit -p tsconfig.app.json --watch"
   },
   "dependencies": {
     "react": "^19.2.8",
