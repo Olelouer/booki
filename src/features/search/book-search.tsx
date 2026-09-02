@@ -1,20 +1,32 @@
 import { useState } from "react"
-import { type Book, DocsSchema } from "../../types/book.schema"
-import z from "zod";
+import { type BookGoogle, BooksListSchemaGoogle } from "../../types/book.schema"
+import { handleCacheTTL } from "../../utils/cache" 
+import * as z from "zod";
+const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
+const baseUrl = import.meta.env.VITE_GOOGLE_BOOKS_URL;
 
 export function BookSearch() {
     const [query, setQuery] = useState('');
-    const [booksData, setBooksData] = useState<Book[]>([]);
+    const [booksData, setBooksData] = useState<BookGoogle[]>([]);
+    const { setCacheTTL, getCacheTTL} = handleCacheTTL();
 
     async function searchBooks() {
+        const cachedData = getCacheTTL(query);
+
+        if(cachedData) {
+            setBooksData(cachedData);
+            return;
+        }
+
         try {
-            const response = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`)
+            const response = await fetch(`${baseUrl}volumes?q=${encodeURIComponent(query)}&key=${apiKey}&maxResults=40`)
             if (!response.ok) {
                 throw new Error(`Statut de la réponse : ${response.status}`);
             }
             const result = await response.json();
-            const books = DocsSchema.parse(result);
-            setBooksData(books.docs);
+            const books = BooksListSchemaGoogle.parse(result);
+            setBooksData(books.items);
+            setCacheTTL(query, books.items);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.error(error.message);
@@ -45,7 +57,7 @@ export function BookSearch() {
             </form>
             <ul>
                 {booksData.map((book) => (
-                    <li key={book.key}>{book.title}</li>
+                    <li key={book.id}>{book.volumeInfo.title}</li>
                 ))}
             </ul>
         </>
