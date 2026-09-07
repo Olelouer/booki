@@ -1,6 +1,7 @@
 import * as z from "zod"
 
 export const TONE = ["sombre", "neutre", "lumineux"] as const;
+export const BOOK_STATUS = ["non lu", "terminé", "en cours", "abandonné"] as const;
 export type Tone = (typeof TONE)[number];
 
 export const BookSchemaOpenLibrary = z.object({
@@ -43,7 +44,8 @@ export type BookGoogle = z.infer<typeof BookSchemaGoogleAPI>;
 
 export const BookSchema = z.object({
     book: BookSchemaGoogleAPI,
-    tone: z.enum(TONE),
+    tone: z.enum(TONE).optional().nullable(),
+    status: z.enum(BOOK_STATUS).optional().nullable(),
 });
 
 export type Book = z.infer<typeof BookSchema>;

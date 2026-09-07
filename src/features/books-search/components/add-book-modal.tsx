@@ -10,7 +10,7 @@ type PropsAddBookModal = {
 }
 
 export function AddBookModal({ bookGoogle, open, onOpenChange, addBook }: PropsAddBookModal) {
-    const [libraryBook, setLibraryBook] = useState<Book>({ book: bookGoogle, tone: "neutre" });
+    const [libraryBook, setLibraryBook] = useState<Book>({ book: bookGoogle, tone: "neutre", status: "non lu" });
     const bookInfo = bookGoogle.volumeInfo;
 
     return (
@@ -29,13 +29,14 @@ export function AddBookModal({ bookGoogle, open, onOpenChange, addBook }: PropsA
                     }}
                 >
                     <label>Nombre de pages :</label>
-                    <input 
+                    <input
                         type="number"
                         name="pages"
                         id="pages"
                         onChange={(e) => {
-                            setLibraryBook({...libraryBook,
-                                book: { 
+                            setLibraryBook({
+                                ...libraryBook,
+                                book: {
                                     ...libraryBook.book,
                                     volumeInfo: {
                                         ...libraryBook.book.volumeInfo,
@@ -48,7 +49,7 @@ export function AddBookModal({ bookGoogle, open, onOpenChange, addBook }: PropsA
                         required
                     />
                     <label>Ton du livre :</label>
-                    <select 
+                    <select
                         onChange={(e) => {
                             setLibraryBook({
                                 ...libraryBook,
@@ -57,9 +58,9 @@ export function AddBookModal({ bookGoogle, open, onOpenChange, addBook }: PropsA
                         }}
                         value={libraryBook.tone}
                     >
-                        {TONE.map((tone: Tone)  => {
-                                return <option key={tone} value={tone}>{tone}</option>
-                            }
+                        {TONE.map((tone: Tone) => {
+                            return <option key={tone} value={tone}>{tone}</option>
+                        }
                         )}
                     </select>
                     <button>Ajouter le livre</button>
