@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { type BookGoogle, type Book } from "../../types/book.schema";
-import { BookCard } from "../../components/cards/book-card";
+import { type BookGoogle, type Book } from "@/types/book.schema";
+import { BookCard } from "@/components/cards/book-card";
 import { searchBooks } from './api';
 import { AddBookModal } from "./components/add-book-modal";
+import { addBook } from "./library"
 
 export function BookSearch() {
     const [query, setQuery] = useState('');
@@ -20,10 +21,9 @@ export function BookSearch() {
         setSelectedBook(bookGoogle);
     }
 
-    function addBook(book: Book) {
-        const storedBooks = localStorage.getItem("library:books");
-        const library: Book[] = storedBooks ? [...JSON.parse(storedBooks), book] : [book]; 
-        localStorage.setItem("library:books", JSON.stringify(library));
+    function handleAddBook(book: Book) {
+        addBook(book);
+        setOpenModal(false);
     }
 
     return (
@@ -46,19 +46,19 @@ export function BookSearch() {
             <ul>
                 {booksData.map((book) => (
                     <li key={book.id}>
-                        <BookCard 
-                            book={book}  
+                        <BookCard
+                            book={book}
                             selectBook={selectBook}
                         />
                     </li>
                 ))}
             </ul>
-            {selectedBook && 
+            {selectedBook &&
                 <AddBookModal
                     open={openModal}
                     onOpenChange={setOpenModal}
                     bookGoogle={selectedBook}
-                    addBook={addBook}
+                    addBook={handleAddBook}
                 ></AddBookModal>
             }
         </>

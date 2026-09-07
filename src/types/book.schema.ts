@@ -41,12 +41,19 @@ export const BookSchemaGoogleAPI = z.object({
 
 export type BookGoogle = z.infer<typeof BookSchemaGoogleAPI>;
 
-export const BookSchema =  z.object({
+export const BookSchema = z.object({
     book: BookSchemaGoogleAPI,
     tone: z.enum(TONE),
 });
 
 export type Book = z.infer<typeof BookSchema>;
+
+export const BooksListSchemaLibrary = z.array(
+    BookSchema.nullable()
+        .catch(ctx => {
+            console.warn(ctx.issues);
+            return null;
+        })).transform(books => books.filter(book => book !== null));
 
 export const BooksListSchemaGoogle = z.object({
     totalItems: z.number().optional(),
