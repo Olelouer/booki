@@ -1,10 +1,13 @@
-import { useParams } from "react-router"
+import { type Book } from "@/types/book.schema"
 
-export function SingleBook() {
-    const { id } = useParams();
-    return(
+
+type SingleBookProps = {
+    book: Book
+}
+export function SingleBook({ book }: SingleBookProps) {
+    return (
         <>
-            <p>Hello {id}</p>
+            <h1>{book.title}</h1>
         </>
     )
 }

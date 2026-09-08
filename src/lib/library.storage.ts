@@ -9,10 +9,10 @@ export function addBook(book: Book): void {
 
     const isDoublon = library.some(b => b.id === book.id);
 
-    if(isDoublon) {
+    if (isDoublon) {
         console.warn("Ce livre est déjà présent dans votre bibliothèque");
         return;
-    } 
+    }
 
     library.push(book);
     localStorage.setItem(LIBRARY_KEY, JSON.stringify(library));
@@ -45,6 +45,13 @@ export function getBooks(): GetBooksResult {
         success: true,
         library: []
     };
+}
+
+export function getSingleBook(bookId: string): Book | undefined {
+    const { success, library } = getBooks();
+    if (!success) return;
+
+    return library.find((book) => book.id === bookId);
 }
 
 export function removeBook(bookId: string): void {

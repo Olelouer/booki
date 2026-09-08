@@ -3,7 +3,7 @@ import { type Book } from "@/types/book.schema";
 import { BookCard } from "@/components/cards/book-card";
 import { searchBooks } from './api';
 import { AddBookModal } from "./components/add-book-modal";
-import { addBook } from "../../lib/library.storage.";
+import { addBook } from "../../lib/library.storage";
 import { useSearchParams } from "react-router";
 
 export function BookSearch() {
@@ -15,7 +15,7 @@ export function BookSearch() {
 
     useEffect(() => {
         const param = searchParams.get("q");
-        if(param) {
+        if (param) {
             setQuery(param);
             handleSearch(param);
         }
