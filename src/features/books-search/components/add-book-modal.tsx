@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import { type BookGoogle, type Book, type Tone, TONE } from '@/types/book.schema'
+import { type Book, type Tone, TONE } from '@/types/book.schema'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 type PropsAddBookModal = {
-    bookGoogle: BookGoogle,
+    book: Book,
     open: boolean,
     onOpenChange: (open: boolean) => void,
     addBook: (book: Book) => void
 }
 
-export function AddBookModal({ bookGoogle, open, onOpenChange, addBook }: PropsAddBookModal) {
-    const [libraryBook, setLibraryBook] = useState<Book>({ book: bookGoogle, tone: "neutre", status: "non lu" });
-    const bookInfo = bookGoogle.volumeInfo;
+export function AddBookModal({ book, open, onOpenChange, addBook }: PropsAddBookModal) {
+    const [libraryBook, setLibraryBook] = useState<Book>({ ...book, tone: "neutre", status: "non lu" });
 
     return (
         <Dialog
@@ -20,7 +19,7 @@ export function AddBookModal({ bookGoogle, open, onOpenChange, addBook }: PropsA
         >
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Ajouter {bookInfo.title} à votre bibliothèque</DialogTitle>
+                    <DialogTitle>Ajouter {book.title} à votre bibliothèque</DialogTitle>
                 </DialogHeader>
                 <form
                     onSubmit={e => {
@@ -36,16 +35,10 @@ export function AddBookModal({ bookGoogle, open, onOpenChange, addBook }: PropsA
                         onChange={(e) => {
                             setLibraryBook({
                                 ...libraryBook,
-                                book: {
-                                    ...libraryBook.book,
-                                    volumeInfo: {
-                                        ...libraryBook.book.volumeInfo,
-                                        pageCount: Number(e.target.value)
-                                    }
-                                }
+                                pageCount: Number(e.target.value)
                             })
                         }}
-                        defaultValue={Number(bookInfo.pageCount) ?? ''}
+                        defaultValue={Number(book.pageCount) ?? ''}
                         required
                     />
                     <label>Ton du livre :</label>
@@ -56,7 +49,7 @@ export function AddBookModal({ bookGoogle, open, onOpenChange, addBook }: PropsA
                                 tone: e.target.value as Tone
                             })
                         }}
-                        value={libraryBook.tone}
+                        value={libraryBook.tone as Tone}
                     >
                         {TONE.map((tone: Tone) => {
                             return <option key={tone} value={tone}>{tone}</option>

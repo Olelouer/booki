@@ -1,17 +1,17 @@
 import { describe, test, expect, beforeEach, vi, afterEach } from 'vitest';
 import { TTL, getCacheTTL, setCacheTTL } from './cache'; 
-import { type BookGoogle } from '../types/book.schema';
+import { type GoogleBook } from '@/types/google.schema';
 
 const key = "harry";
 const zolaKey = "zola";
 
-const data: BookGoogle[] = [
+const data: GoogleBook[] = [
     {"id":"fD1VEAAAQBAJ","volumeInfo":{"title":"Harry Potter et l'Histoire","publishedDate":"2025-03-27","language":"fr","pageCount":125}},
     {"id":"YjxVEAAAQBAJ","volumeInfo":{"title":"Agir et penser comme Harry Potter","publishedDate":"2021-10-14","language":"fr","pageCount":145}},
     {"id":"jLm9EQAAQBAJ","volumeInfo":{"title":"Harry Potter. À l'école des sciences morales et politiques","publishedDate":"2014-05-22","language":"fr","pageCount":81}},
 ];
 
-const zolaData: BookGoogle[] = [
+const zolaData: GoogleBook[] = [
     {"id":"sLkeCwAAQBAJ","volumeInfo":{"title":"Emile Zola - Les oeuvres complètes (édition augmentée)","publishedDate":"2014-01-05","language":"fr","pageCount":10964}},
     {"id":"LHlAEAAAQBAJ","volumeInfo":{"title":"Coffret Émile Zola","publishedDate":"2021-09-01","language":"fr","pageCount":1782}},
     {"id":"d-q7ywEACAAJ","volumeInfo":{"title":"La Terre","publishedDate":"2019-01-30","language":"fr","pageCount":366}}

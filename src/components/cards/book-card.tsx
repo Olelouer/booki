@@ -1,16 +1,21 @@
-import type { BookGoogle } from "../../types/book.schema";
+import { type Book } from "@/types/book.schema";
+import { Link } from 'react-router';
 
 type BookCardProps = {
-    book: BookGoogle;
-    selectBook?: (book: BookGoogle) => void
+    book: Book;
+    selectBook?: (book: Book) => void
 }
 
-export function BookCard({ book, selectBook }: BookCardProps) {
-    const bookInfo = book.volumeInfo;
-    
+export function BookCard({ book, selectBook }: BookCardProps) {    
     return (
         <div>
-            <p>{bookInfo.title}</p>
+            <p>{book.title}</p>
+            <Link 
+                to={`/book/${book.id}`}
+                className="cursor-pointer"
+            >
+                Voir le détail du livre
+            </Link>
             {selectBook &&
                 <button 
                     onClick={() => selectBook(book)}

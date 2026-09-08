@@ -1,24 +1,34 @@
-import { useState } from "react";
-import { type BookGoogle, type Book } from "@/types/book.schema";
+import { useEffect, useState } from "react";
+import { type Book } from "@/types/book.schema";
 import { BookCard } from "@/components/cards/book-card";
 import { searchBooks } from './api';
 import { AddBookModal } from "./components/add-book-modal";
-import { addBook } from "./library"
+import { addBook } from "../../lib/library.storage.";
+import { useSearchParams } from "react-router";
 
 export function BookSearch() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [query, setQuery] = useState('');
-    const [booksData, setBooksData] = useState<BookGoogle[]>([]);
-    const [selectedBook, setSelectedBook] = useState<BookGoogle | null>(null);
+    const [booksData, setBooksData] = useState<Book[]>([]);
+    const [selectedBook, setSelectedBook] = useState<Book | null>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);
 
-    async function handleSearch() {
+    useEffect(() => {
+        const param = searchParams.get("q");
+        if(param) {
+            setQuery(param);
+            handleSearch(param);
+        }
+    }, [searchParams])
+
+    async function handleSearch(query: string) {
         const booksData = await searchBooks(query);
         setBooksData(booksData);
     }
 
-    function selectBook(bookGoogle: BookGoogle) {
+    function selectBook(book: Book) {
         setOpenModal(true);
-        setSelectedBook(bookGoogle);
+        setSelectedBook(book);
     }
 
     function handleAddBook(book: Book) {
@@ -31,12 +41,13 @@ export function BookSearch() {
             <form
                 onSubmit={e => {
                     e.preventDefault();
-                    handleSearch();
+                    setSearchParams({ q: query });
                 }}
             >
                 <input
                     type="search"
                     placeholder="Entrer le titre d'un livre..."
+                    value={query}
                     onChange={e => setQuery(e.target.value)}
                 />
                 <button type="submit">
@@ -57,7 +68,7 @@ export function BookSearch() {
                 <AddBookModal
                     open={openModal}
                     onOpenChange={setOpenModal}
-                    bookGoogle={selectedBook}
+                    book={selectedBook}
                     addBook={handleAddBook}
                 ></AddBookModal>
             }

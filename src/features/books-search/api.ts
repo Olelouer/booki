@@ -1,12 +1,13 @@
-import { getCacheTTL, setCacheTTL } from "../../utils/cache";
-import { BooksListSchemaGoogle, type BookGoogle } from "../../types/book.schema";
+import { getCacheTTL, setCacheTTL } from "@/utils/cache";
+import { type Book } from "@/types/book.schema";
+import { GoogleBooksListSchema } from "@/types/google.schema";
 import * as z from 'zod';
 const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
 const baseUrl = import.meta.env.VITE_GOOGLE_BOOKS_URL;
 
-export async function searchBooks(query: string): Promise<BookGoogle[]>  {
-    const cachedData: BookGoogle[] | null = getCacheTTL(query);
-
+export async function searchBooks(query: string): Promise<Book[]>  {
+    const cachedData: Book[] | null = getCacheTTL(query);
+    
     if(cachedData) return cachedData;
 
     try {
@@ -15,7 +16,7 @@ export async function searchBooks(query: string): Promise<BookGoogle[]>  {
             throw new Error(`Statut de la réponse : ${response.status}`);
         }
         const result = await response.json();
-        const books = BooksListSchemaGoogle.parse(result);
+        const books = GoogleBooksListSchema.parse(result);
         setCacheTTL(query, books.items);
         return books.items;
     } catch (error: unknown) {

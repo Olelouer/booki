@@ -2,12 +2,12 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import './index.css'
-import { BookSearch } from './features/books-search/books-search'
+import App from './App'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <BookSearch />
+      <App />
     </BrowserRouter>
   </StrictMode>
   ,
