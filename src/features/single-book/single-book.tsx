@@ -1,13 +1,22 @@
-import { type Book } from "@/types/book.schema"
+import { getSingleBook } from "@/lib/library.storage";
+import { useParams } from "react-router"
+import { SingleBookDetails } from "./components/single-book-details";
 
 
-type SingleBookProps = {
-    book: Book
-}
-export function SingleBook({ book }: SingleBookProps) {
+
+export function SingleBook() {
+    const { id } = useParams();
+    const book = id ? getSingleBook(id) : undefined;
+
+    if (!book) {
+        return (
+            <p>404 not found</p>
+        )
+    }
+
     return (
-        <>
-            <h1>{book.title}</h1>
-        </>
+        <SingleBookDetails
+            book={book}
+        />
     )
 }

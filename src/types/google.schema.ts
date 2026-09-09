@@ -31,7 +31,7 @@ export type GoogleBook = z.infer<typeof GoogleBookSchema>;
 
 const googleBookToBook = (book: GoogleBook): Book => {
     return BookSchema.parse({
-        id: book.id,
+        googleId: book.id,
         title: book.volumeInfo.title,
         imageLinks: book.volumeInfo.imageLinks?.thumbnail,
         infoLink: book.volumeInfo.infoLink,

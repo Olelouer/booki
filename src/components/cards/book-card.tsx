@@ -6,23 +6,23 @@ type BookCardProps = {
     selectBook?: (book: Book) => void
 }
 
-export function BookCard({ book, selectBook }: BookCardProps) {    
+export function BookCard({ book, selectBook }: BookCardProps) {
     return (
         <div>
             <p>{book.title}</p>
-            <Link 
-                to={`/book/${book.id}`}
-                className="cursor-pointer"
-            >
-                Voir le détail du livre
-            </Link>
-            {selectBook &&
-                <button 
+            {selectBook ?
+                <button
                     onClick={() => selectBook(book)}
                     className="cursor-pointer"
                 >
                     Ajouter
-                </button>
+                </button> :
+                <Link
+                    to={`/book/${book.id}`}
+                    className="cursor-pointer"
+                >
+                    Voir le détail du livre
+                </Link>
             }
         </div>
     )

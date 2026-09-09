@@ -7,7 +7,7 @@ export function addBook(book: Book): void {
     const { success, library } = getBooks();
     if (!success) return;
 
-    const isDoublon = library.some(b => b.id === book.id);
+    const isDoublon = library.some(b => b.googleId === book.googleId);
 
     if (isDoublon) {
         console.warn("Ce livre est déjà présent dans votre bibliothèque");

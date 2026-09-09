@@ -5,7 +5,8 @@ export const BOOK_STATUS = ["non lu", "terminé", "en cours", "abandonné"] as c
 export type Tone = (typeof TONE)[number];
 
 export const BookSchema = z.object({
-    id: z.string(),
+    id: z.uuid().default(() => crypto.randomUUID()),
+    googleId: z.string().optional().nullable(),
     title: z.string(),
     imageLinks: z.string().optional(),
     infoLink: z.string().optional(),
@@ -33,6 +34,6 @@ export const LibraryBooksListSchema = z.array(
         })).transform(books => books.filter((book): book is Book => book !== null));
 
 export type GetBooksResult = {
-  success: boolean;
-  library: Book[];
+    success: boolean;
+    library: Book[];
 };
