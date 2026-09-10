@@ -54,10 +54,19 @@ export function getSingleBook(bookId: string): Book | undefined {
     return library.find((book) => book.id === bookId);
 }
 
-export function removeBook(bookId: string): void {
+export function removeBook(bookId: string) {
     const { success, library } = getBooks();
-    if (!success) return;
+    if (!success) {
+        console.error("Impossible de supprimer le livre");
+        return {
+            success: false
+        };
+    }
 
     const filteredLibrary = library.filter(book => book.id !== bookId);
     localStorage.setItem(LIBRARY_KEY, JSON.stringify(filteredLibrary));
+
+    return {
+        success: true
+    }
 }

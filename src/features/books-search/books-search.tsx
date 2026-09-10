@@ -34,6 +34,7 @@ export function BookSearch() {
     function handleAddBook(book: Book) {
         addBook(book);
         setOpenModal(false);
+        setSelectedBook(null);
     }
 
     return (
