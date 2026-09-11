@@ -3,6 +3,7 @@ import * as z from "zod"
 export const TONE = ["sombre", "neutre", "lumineux"] as const;
 export const BOOK_STATUS = ["non lu", "terminé", "en cours", "abandonné"] as const;
 export type Tone = (typeof TONE)[number];
+export type BookStatus = (typeof BOOK_STATUS)[number];
 
 export const BookSchema = z.object({
     id: z.uuid().default(() => crypto.randomUUID()),
@@ -16,12 +17,13 @@ export const BookSchema = z.object({
     authors: z.array(z.string()).optional(),
     language: z.string().optional(),
     pageCount: z.number().optional(),
+    currentPage: z.number().optional(),
     publisher: z.string().optional(),
     publishedDate: z.string().optional(),
     tone: z.enum(TONE).optional().nullable(),
     status: z.enum(BOOK_STATUS).optional().nullable(),
     startedAt: z.iso.date().optional(),
-    finishedAt: z.iso.date().optional(),
+    finishedAt: z.iso.date().optional().nullable(),
 });
 
 export type Book = z.infer<typeof BookSchema>;

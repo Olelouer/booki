@@ -1,9 +1,10 @@
 import type { GetBooksResult } from "@/types/book.schema";
-import { getBooks } from "../../lib/library.storage"
+import { getBooks, getYearPagesCount } from "../../lib/library.storage"
 import { LibraryList } from "./components/library-list";
 
 export function Library() {
     const { success, library }: GetBooksResult = getBooks();
+    const pagesCount = getYearPagesCount();
 
     if (!success) {
         return (
@@ -14,6 +15,10 @@ export function Library() {
     return (
         <>
             <p>Ma bibliothèque</p>
+            {pagesCount > 0 &&
+                <p>{pagesCount}</p>
+            }
+            
             <LibraryList
                 books={library}
             />
