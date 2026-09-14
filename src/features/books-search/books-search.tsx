@@ -55,7 +55,7 @@ export function BookSearch() {
                     Valider
                 </button>
             </form>
-            <ul>
+            <ul className="grid md:grid-cols-5 gap-8">
                 {booksData.map((book) => (
                     <li key={book.id}>
                         <BookCard
