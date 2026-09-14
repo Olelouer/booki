@@ -136,7 +136,6 @@ export function getYearPagesCount() {
     if(!success) {
         return 0;
     }
-    console.log()
 
     return library.reduce((acc, book) => {
         if(book.startedAt && book.currentPage && book.startedAt.slice(0,4) === new Date().getFullYear().toString()) {

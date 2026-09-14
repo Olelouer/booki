@@ -10,7 +10,7 @@ type PropsAddBookModal = {
 }
 
 export function AddBookModal({ book, open, onOpenChange, addBook }: PropsAddBookModal) {
-    const [libraryBook, setLibraryBook] = useState<Book>({ ...book, tone: "neutre", status: "non lu" });
+    const [libraryBook, setLibraryBook] = useState<Book>({ ...book, tone: "neutral", status: "unread" });
 
     return (
         <Dialog

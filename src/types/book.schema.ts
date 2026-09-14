@@ -1,7 +1,7 @@
 import * as z from "zod"
 
-export const TONE = ["sombre", "neutre", "lumineux"] as const;
-export const BOOK_STATUS = ["non lu", "terminé", "en cours", "abandonné"] as const;
+export const TONE = ["dark", "neutral", "light"] as const;
+export const BOOK_STATUS = ["unread", "completed", "reading", "abandoned"] as const;
 export type Tone = (typeof TONE)[number];
 export type BookStatus = (typeof BOOK_STATUS)[number];
 

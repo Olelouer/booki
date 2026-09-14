@@ -7,6 +7,8 @@ type SingleBookProps = {
 }
 
 export function SingleBookDetails({ book, removeBook, updateBook }: SingleBookProps) {
+    const today = new Date().toISOString().slice(0,10);
+
     return (
         <>
             <h1>{book.title}</h1>
@@ -14,14 +16,14 @@ export function SingleBookDetails({ book, removeBook, updateBook }: SingleBookPr
             <p>{book.tone}</p>
             <div className="flex flex-col">
                 <button
-                    onClick={() => updateBook(book.id, { status: "terminé", finishedAt: new Date().toISOString().slice(0,10) })}
+                    onClick={() => updateBook(book.id, { status: "completed", finishedAt: today })}
                     className="cursor-pointer flex"
                 >
                     Marquer comme lu
                 </button>
                 <button
                     className="cursor-pointer flex"
-                    onClick={() => updateBook(book.id, { status: "non lu", startedAt: new Date().toISOString().slice(0,10), finishedAt: null })}
+                    onClick={() => updateBook(book.id, { status: "unread", startedAt: today, finishedAt: null })}
                 >
                     Relire
                 </button>
