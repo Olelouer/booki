@@ -8,6 +8,10 @@ export const GoogleBookSchema = z.object({
         imageLinks: z.object({
             smallThumbnail: z.string().optional(),
             thumbnail: z.string().optional(),
+            small: z.string().optional(),
+            medium: z.string().optional(),
+            large: z.string().optional(),
+            extraLarge: z.string().optional(),
         }).optional(),
         industryIdentifiers: z.array(
             z.object({
@@ -33,7 +37,13 @@ const googleBookToBook = (book: GoogleBook): Book => {
     return BookSchema.parse({
         googleId: book.id,
         title: book.volumeInfo.title,
-        imageLinks: book.volumeInfo.imageLinks?.thumbnail,
+        imageLinks: 
+            book.volumeInfo.imageLinks?.extraLarge ?? 
+            book.volumeInfo.imageLinks?.large ?? 
+            book.volumeInfo.imageLinks?.medium ?? 
+            book.volumeInfo.imageLinks?.small ?? 
+            book.volumeInfo.imageLinks?.thumbnail ?? 
+            book.volumeInfo.imageLinks?.smallThumbnail,
         infoLink: book.volumeInfo.infoLink,
         categories: book.volumeInfo.categories,
         description: book.volumeInfo.description,

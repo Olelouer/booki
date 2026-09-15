@@ -14,11 +14,9 @@ export function Library() {
 
     return (
         <>
-            <p>Ma bibliothèque</p>
-            {pagesCount > 0 &&
+            {pagesCount > 1000 &&
                 <p>{pagesCount}</p>
             }
-            
             <LibraryList
                 books={library}
             />

@@ -10,10 +10,6 @@
 
   --foreground: oklch(0.145 0 0);
 
-  --card: oklch(1 0 0);
-
-  --card-foreground: oklch(0.145 0 0);
-
   --popover: oklch(1 0 0);
 
   --popover-foreground: oklch(0.145 0 0);
@@ -30,7 +26,7 @@
 
   --muted-foreground: oklch(0.556 0 0);
 
-  --accent: #991B1B;
+  --accent: #7F1D1D;
 
   --accent-foreground: white;
 

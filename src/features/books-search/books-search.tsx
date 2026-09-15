@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { type Book } from "@/types/book.schema";
-import { BookCard } from "@/components/cards/book-card";
 import { searchBooks } from './api';
 import { AddBookModal } from "./components/add-book-modal";
 import { addBook } from "../../lib/library.storage";
 import { useSearchParams } from "react-router";
+import { BookSearchResults } from "./components/book-search-results";
+import { BookSearchForm } from "./components/book-search-form";
 
 export function BookSearch() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -26,7 +27,7 @@ export function BookSearch() {
         setBooksData(booksData);
     }
 
-    function selectBook(book: Book) {
+    function onSelect(book: Book) {
         setOpenModal(true);
         setSelectedBook(book);
     }
@@ -39,32 +40,16 @@ export function BookSearch() {
 
     return (
         <>
-            <form
-                onSubmit={e => {
-                    e.preventDefault();
-                    setSearchParams({ q: query });
-                }}
-            >
-                <input
-                    type="search"
-                    placeholder="Entrer le titre d'un livre..."
-                    value={query}
-                    onChange={e => setQuery(e.target.value)}
-                />
-                <button type="submit">
-                    Valider
-                </button>
-            </form>
-            <ul className="grid md:grid-cols-5 gap-8">
-                {booksData.map((book) => (
-                    <li key={book.id}>
-                        <BookCard
-                            book={book}
-                            selectBook={selectBook}
-                        />
-                    </li>
-                ))}
-            </ul>
+            <h1 className="font-serif font-medium text-4xl mb-5 mt-12">Chercher un livre</h1>
+            <BookSearchForm 
+                query={query}
+                setQuery={setQuery}
+                onSubmit={() => setSearchParams({ q: query })}
+            />
+            <BookSearchResults 
+                books={booksData}
+                onSelect={onSelect}
+            />
             {selectedBook &&
                 <AddBookModal
                     open={openModal}

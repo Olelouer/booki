@@ -1,6 +1,7 @@
 import { type Book, BOOK_STATUS, type BookStatus, type Tone, TONE } from "@/types/book.schema";
 import { BookCard } from "@/components/cards/book-card";
 import { useState } from "react";
+import { SelectInput } from "@/components/ui/select-input";
 
 type LibraryListProps = {
     books: Book[],
@@ -28,42 +29,51 @@ export function LibraryList({ books }: LibraryListProps) {
     }
 
     return (
-        <>
-            {BOOK_STATUS &&
-                <select
-                    onChange={e => {
-                        handleFilters("status", e.currentTarget.value);
-                    }}
-                    name="status"
-                    value={filters.status}
-                >
-                    <option value="">Tous</option>
-                    {
-                        BOOK_STATUS.map((status: BookStatus) => <option key={status} value={status}>{status}</option>)
+        <>  
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-8">
+                    {BOOK_STATUS &&
+                        <div className="flex flex-col">
+                            <label htmlFor="status" className="text-[13px] mb-1 text-stone-500 uppercase tracking-wider">Statut :</label>
+                            <SelectInput
+                                onChange={e => {
+                                    handleFilters("status", e.currentTarget.value);
+                                }}
+                                id="status"
+                                name="status"
+                                value={filters.status}
+                                data={BOOK_STATUS}
+                            />
+                        </div>
                     }
-                </select>
-            }
-            {TONE &&
-                <select
-                    onChange={e => {
-                        handleFilters("tone", e.currentTarget.value);
-                    }}
-                    name="tone"
-                    value={filters.tone}
-                >
-                    <option value="">Tous</option>
-                    {
-                        TONE.map((tone: Tone) => <option key={tone} value={tone}>{tone}</option>)
+                    {TONE &&
+                        <div className="flex flex-col">
+                            <label htmlFor="tone" className="text-[13px] mb-1 text-stone-500 uppercase tracking-wider">Ton :</label>
+                            <SelectInput
+                                onChange={e => {
+                                    handleFilters("tone", e.currentTarget.value);
+                                }}
+                                id="tone"
+                                name="tone"
+                                value={filters.tone}
+                                data={TONE}
+                            />
+                        </div>
                     }
-                </select>
-            }
-            {library.map((book: Book) =>
-                <li key={book.id}>
-                    <BookCard
-                        book={book}
-                    />
-                </li>
-            )}
+                </div>
+                {library.length > 0 && 
+                    <p className="text-[13px] text-stone-500 uppercase tracking-wider">{library.length} Livres</p>
+                }
+            </div>
+            <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                {library.map((book: Book) =>
+                    <li key={book.id}>
+                        <BookCard
+                            book={book}
+                        />
+                    </li>
+                )}
+            </ul>
         </>
     )
 }
