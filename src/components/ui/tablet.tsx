@@ -1,13 +1,15 @@
+import { cn } from "cn";
+
 type TabletProps = {
     text: string;
-    
+    className?: string;
 }
 
-export function Tablet({ text, ...props }: TabletProps) {
+export function Tablet({ text, className, ...props }: TabletProps) {
     return (
         <div 
             {...props}
-            className="flex px-2.5 py-1 rounded-sm bg-stone-200 text-xs"
+            className={cn("flex px-2.5 py-1 rounded-sm bg-stone-200 text-xs", className)}
         >
             <span>{text}</span>
         </div>

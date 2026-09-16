@@ -23,6 +23,8 @@ export const BookSchema = z.object({
     tone: z.enum(TONE).optional().nullable(),
     status: z.enum(BOOK_STATUS).optional().nullable(),
     startedAt: z.iso.date().optional(),
+    updatedAt: z.iso.datetime().optional(),
+    lastActivityAt: z.iso.datetime().optional(),
     finishedAt: z.iso.date().optional().nullable(),
 });
 

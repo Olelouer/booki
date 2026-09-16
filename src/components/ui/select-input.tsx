@@ -9,7 +9,7 @@ export function SelectInput<T extends string>({data, className, ...props}: Selec
     return (
         <div className="relative">
             <select
-                className="border-border border-1 pl-3.5 pr-8 py-2 bg-white rounded-lg text-sm duration-100 cursor-pointer appearance-none hover:border-stone-400 focus:border-red-900"
+                className="border-border border-1 pl-3.5 pr-8 py-2 bg-white rounded-lg text-sm duration-100 cursor-pointer appearance-none hover:border-stone-400 focus:border-accent"
                 {...props}
             >
                 <option key="all" value="">Tous</option>

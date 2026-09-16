@@ -7,7 +7,7 @@ type SingleBookProps = {
 }
 
 export function SingleBookDetails({ book, removeBook, updateBook }: SingleBookProps) {
-    const today = new Date().toISOString().slice(0,10);
+    const today = new Date().toISOString().split("T")[0];
 
     return (
         <>
@@ -23,14 +23,14 @@ export function SingleBookDetails({ book, removeBook, updateBook }: SingleBookPr
                 </button>
                 <button
                     className="cursor-pointer flex"
-                    onClick={() => updateBook(book.id, { status: "unread", startedAt: today, finishedAt: null })}
+                    onClick={() => updateBook(book.id, { status: "unread", currentPage: 0, startedAt: today, finishedAt: null })}
                 >
                     Relire
                 </button>
                 <p>{book.currentPage}</p>
                 <button
                     className="cursor-pointer flex"
-                    onClick={() => updateBook(book.id, { currentPage: (book.currentPage || 0) + 15 })}
+                    onClick={() => updateBook(book.id, { currentPage: (book.currentPage || 0) + 15, status: "reading", lastActivityAt: new Date().toISOString()})}
                 >
                     Ajouter 15 pages
                 </button>

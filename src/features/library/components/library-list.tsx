@@ -1,4 +1,4 @@
-import { type Book, BOOK_STATUS, type BookStatus, type Tone, TONE } from "@/types/book.schema";
+import { type Book, BOOK_STATUS, TONE } from "@/types/book.schema";
 import { BookCard } from "@/components/cards/book-card";
 import { useState } from "react";
 import { SelectInput } from "@/components/ui/select-input";

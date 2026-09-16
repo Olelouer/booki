@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { Tablet } from "../ui/tablet"
 import { googleDateToYear } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { ImageAspect } from "../ui/image-aspect"
 
 type BookCardProps = {
     book: Book;
@@ -14,12 +15,18 @@ export function BookCard({ book, onSelect }: BookCardProps) {
 
     return (
         <div className="flex flex-col gap-2.5 h-full">
-            <div className="relative flex items-center justify-center w-full aspect-2/3 rounded-xl overflow-hidden bg-stone-100">
+            {/*<div className="relative flex items-center justify-center w-full aspect-2/3 rounded-xl overflow-hidden bg-stone-100">
                 {book.imageLinks ?
                     <img className="absolute w-full h-full inset-0 object-cover" src={book.imageLinks} alt={`Couverture de ${book.title}`}/>
                     : <span className="text-2xl font-serif text-stone-500">{book.title.slice(0, 2).toUpperCase()}</span>
                 }
-            </div>
+            </div>*/}
+
+            <ImageAspect 
+                src={book.imageLinks} 
+                alt={`Couverture de ${book.title}`}
+                fallback={book.title.slice(0,2).toUpperCase()}
+            />
 
             <div className="flex flex-col flex-grow justify-between">
                 <div className="flex flex-col gap-2.5 ">
