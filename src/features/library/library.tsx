@@ -27,15 +27,17 @@ export function Library() {
 
     return (
         <>
-            {pagesCount > 1000 &&
+            {pagesCount > 10000 &&
                 <p>{pagesCount}</p>
             }
-            <div className="mb-8">
-                <LibraryInProgress 
-                    books={inProgressBooks}
-                    onUpdateBook={handleUpdateBook}
-                />
-            </div>
+            {Number(inProgressBooks.length) > 0 &&
+                <div className="mb-8">
+                    <LibraryInProgress 
+                        books={inProgressBooks}
+                        onUpdateBook={handleUpdateBook}
+                    />
+                </div>
+            }
             <LibraryList
                 books={books}
             />

@@ -131,7 +131,7 @@ function saveBooks(library: Book[]) {
     }
 }
 
-export function getYearPagesCount() {
+export function getYearPagesCount(): number {
     const { success, library } = getBooks();
     if(!success) {
         return 0;
@@ -144,3 +144,57 @@ export function getYearPagesCount() {
         return acc;
     }, 0);
 }
+
+export function nextRead(bookId: Book["id"]) {
+    const {success, library} = getBooks();
+
+    if(!success) {
+        return {
+            success: false,
+        }
+    }
+
+    const currentBook = library.filter((b: Book) => b.id === bookId);
+
+    const { pageCount, tone, publishedDate } = currentBook;
+
+    const unreadBooks = library.filter((b: Book) => b.status === 'unread');
+
+    if(unreadBooks.length === 0) return;
+
+    type ScoredBook = Book & { score : number };
+
+    const recommandation = unreadBooks.reduce<ScoredBook[]>((acc, book) => {
+        const pageScore = book.pageCount ? (0.4 * ((getPageScore(pageCount) - getPageScore(book.pageCount)) / 2 )) : 0;
+        const toneScore = book.tone ? (0.4 * ((getToneNumber(tone) - getToneNumber(book.tone)) / 2 )) : 0;
+        const epoqueScore = book.tone ? (0.2 * ((getToneNumber(tone) - getToneNumber(book.tone)) / 2 )) : 0;
+        acc.push({
+            ...book,
+            score: pageScore + toneScore + epoqueScore,
+        });
+        return acc;
+    }, []).sort((a, b) => b.score - a.score ).slice(0, 3);
+    
+    return recommandation;
+}
+
+export function getToneNumber(tone: Book["tone"]): number {
+    switch (tone) {
+        case "dark":
+            return 1;
+        case "neutral":
+            return 2;
+        case "light":
+            return 3;
+        default:
+            return 0;
+    }
+}
+
+export function getPageScore(totalPages: number) {
+    if(totalPages <= 250) return 1;
+    if(totalPages > 250 && totalPages <= 500 ) return 2;
+    if(totalPages > 500) return 3;
+    return 0;
+}
+ 
