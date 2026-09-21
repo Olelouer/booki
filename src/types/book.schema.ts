@@ -30,6 +30,11 @@ export const BookSchema = z.object({
 
 export type Book = z.infer<typeof BookSchema>;
 
+export type RecommendedBook = Book & {
+    diversityScore: number;
+    justification: string;
+};
+
 export const LibraryBooksListSchema = z.array(
     BookSchema.nullable()
         .catch(ctx => {

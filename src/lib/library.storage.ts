@@ -53,7 +53,7 @@ export function getBooks(): GetBooksResult {
     }
 }
 
-export function getSingleBook(bookId: string): Book | undefined {
+export function getBookById(bookId: string): Book | undefined {
     const { success, library } = getBooks();
     if (!success) return;
 
@@ -131,76 +131,11 @@ function saveBooks(library: Book[]) {
     }
 }
 
-export function getYearPagesCount(): number {
-    const { success, library } = getBooks();
-    if (!success) {
-        return 0;
-    }
-
-    return library.reduce((acc, book) => {
+export function getYearPagesCount(books: Book[]): number {
+    return books.reduce((acc, book) => {
         if (book.startedAt && book.currentPage && book.startedAt.slice(0, 4) === new Date().getFullYear().toString()) {
             return acc + book.currentPage;
         }
         return acc;
     }, 0);
-}
-
-export function nextRead(bookId: Book["id"]) {
-    const { success, library } = getBooks();
-
-    if (!success) {
-        return {
-            success: false,
-        }
-    }
-
-    const currentBook: Book | undefined = library.find((b: Book) => b.id === bookId);
-
-    if (!currentBook) return;
-
-    const unreadBooks = library.filter((b: Book) => b.status === 'unread');
-
-    if (unreadBooks.length === 0) return;
-
-    type ScoredBook = Book & { score: number };
-
-    const recommandation = unreadBooks.reduce<ScoredBook[]>((acc, book) => {
-        const pageScore = currentBook.pageCount && book.pageCount ? (0.4 * (Math.abs(getPageScore(currentBook.pageCount) - getPageScore(book.pageCount)))) : 0;
-        const toneScore = currentBook.tone && book.tone ? (0.4 * (Math.abs(getToneNumber(currentBook.tone) - getToneNumber(book.tone)))) : 0;
-        const epoqueScore = currentBook.publishedDate && book.publishedDate ? (0.2 * (Math.abs(getDateScore(currentBook.publishedDate) - getDateScore(book.publishedDate)))) : 0;
-        acc.push({
-            ...book,
-            score: pageScore + toneScore + epoqueScore,
-        });
-        return acc;
-    }, []).sort((a, b) => b.score - a.score).slice(0, 3);
-
-    return recommandation;
-}
-
-function getToneNumber(tone: NonNullable<Book["tone"]>): number {
-    switch (tone) {
-        case "dark":
-            return 1;
-        case "neutral":
-            return 2;
-        case "light":
-            return 3;
-    }
-}
-
-function getPageScore(totalPages: number) {
-    if (totalPages <= 250) return 1;
-    if (totalPages <= 500) return 2;
-    return 3;
-}
-
-function getDateScore(bookDate: Book['publishedDate']) {
-    const date = Number(bookDate?.slice(0, 4));
-    const today = Number(new Date().toISOString().slice(0, 4));
-    const diff = today - date;
-    if (!diff) return 0;
-    if (diff <= 10) return 1;
-    if (diff <= 75) return 2;
-    return 3;
 }

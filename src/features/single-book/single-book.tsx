@@ -1,4 +1,4 @@
-import { getSingleBook, updateBook } from "@/lib/library.storage"
+import { getBookById, updateBook } from "@/lib/library.storage"
 import { useNavigate, useParams } from "react-router"
 import { SingleBookDetails } from "./components/single-book-details"
 import { removeBook } from "@/lib/library.storage"
@@ -7,7 +7,7 @@ import { useState } from "react"
 
 export function SingleBook() {
     const { id } = useParams();
-    const [book, setBook] = useState<Book | undefined>(() => id ? getSingleBook(id) : undefined);
+    const [book, setBook] = useState<Book | undefined>(() => id ? getBookById(id) : undefined);
     const navigate = useNavigate();
 
     if(!id || !book) {
