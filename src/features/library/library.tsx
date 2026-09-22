@@ -1,9 +1,10 @@
-import type { Book, GetBooksResult, RecommendedBook } from "@/types/book.schema";
+import type { Book, GetBooksResult } from "@/types/book.schema";
 import { getBooks, getYearPagesCount, updateBook } from "@/lib/library.storage"
 import { LibraryList } from "./components/library-list";
 import { LibraryInProgress } from "./components/library-in-progress";
 import { useState } from "react";
 import { getNextReads } from "@/lib/recommendations";
+import { RecommendationList } from "./components/recommendations-list";
 
 export function Library() {
     const { success, library }: GetBooksResult = getBooks();
@@ -28,6 +29,8 @@ export function Library() {
 
     const recommendations = inProgressBooks.length > 0 ? getNextReads(inProgressBooks[0].id, books) : [];
 
+    const currentBook = inProgressBooks[0];
+
     return (
         <>
             {pagesCount > 10000 &&
@@ -42,12 +45,12 @@ export function Library() {
                 </div>
             }
             {recommendations.length > 0 && 
-                recommendations.map((book: RecommendedBook) => 
-                    <div key={book.id}>
-                        <p></p>{book.title}
-                        <p>{book.justification}</p>
-                    </div>
-                )
+                <div className="mb-8">
+                    <RecommendationList 
+                        recommendedBooks={recommendations}
+                        currentBook={currentBook}
+                    />
+                </div>
             }
             <LibraryList
                 books={books}

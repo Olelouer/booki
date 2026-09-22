@@ -32,8 +32,18 @@ export type Book = z.infer<typeof BookSchema>;
 
 export type RecommendedBook = Book & {
     diversityScore: number;
-    justification: string;
+    breakdown: ScoreBreakdown;
+    justification?: string;
 };
+
+export type ScoreBreakdown = {
+    publicationDateDiff: number;
+    toneDiff: number;
+    pageDiff: number;
+    pageScore: number;
+    publicationDateScore: number;
+    toneScore: number;
+}
 
 export const LibraryBooksListSchema = z.array(
     BookSchema.nullable()

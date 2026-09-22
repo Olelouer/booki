@@ -3,6 +3,7 @@ import { ProgressBar } from "../ui/progress-bar";
 import { ImageAspect } from "../ui/image-aspect";
 import { Tablet } from "../ui/tablet";
 import { Button } from "../ui/button";
+import { AuthorsList } from "../lists/authors-list";
 
 type BookCardSimpleProps = {
     book: Book;
@@ -23,28 +24,8 @@ export function BookCardSimple({ book, onUpdateBook }: BookCardSimpleProps) {
                 />
             </div>
             <div className="flex flex-grow flex-col gap-1">
-                <h2>{book.title}</h2>
-                 {book.authors && book.authors.length > 0 &&
-                    <div className="flex flex-wrap gap-1.5 items-center">
-                        <div className="flex flex-wrap gap-1.5">
-                            {book.authors.slice(0, 2).map(author => {
-                                return (
-                                    <span
-                                        key={author}
-                                        className="text-sm text-stone-700 after:content-['·'] after:ml-1.5 last:after:content-['']"
-                                    >
-                                        {author}
-                                    </span>
-                                )
-                            })}
-                        </div>
-                        {book.authors.length > 2 &&
-                            <Tablet
-                                text={`+${book.authors.length - 2}`}
-                            />
-                        }
-                    </div>
-                }
+                <h2 className="font-serif line-clamp-2">{book.title}</h2>
+                <AuthorsList authors={book.authors}/>
                 {canCalculatePercentage &&
                     <>
                         <ProgressBar 
@@ -56,8 +37,7 @@ export function BookCardSimple({ book, onUpdateBook }: BookCardSimpleProps) {
                         <span className="text-stone-600 text-[13px]">p. {`${book.currentPage}/${book.pageCount} · ${percentage}%`}</span>
                     </>
                 }
-                <div                         className="mt-auto flex pt-2"
->
+                <div className="mt-auto flex pt-2">
                     <Button
                         variant="secondary"
                         onClick={() => onUpdateBook(book.id, { lastActivityAt: new Date().toISOString()})}

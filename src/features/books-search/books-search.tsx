@@ -6,6 +6,7 @@ import { addBook } from "../../lib/library.storage";
 import { useSearchParams } from "react-router";
 import { BookSearchResults } from "./components/book-search-results";
 import { BookSearchForm } from "./components/book-search-form";
+import { LibraryList } from "../library/components/library-list";
 
 export function BookSearch() {
     const [searchParams, setSearchParams] = useSearchParams();

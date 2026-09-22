@@ -1,4 +1,4 @@
-import type { Book, RecommendedBook } from "@/types/book.schema";
+import type { Book, RecommendedBook, ScoreBreakdown } from "@/types/book.schema";
 
 export function getNextReads(bookId: Book["id"], books: Book[]): RecommendedBook[] {
     const currentBook = books.find((b: Book) => b.id === bookId);
@@ -7,24 +7,49 @@ export function getNextReads(bookId: Book["id"], books: Book[]): RecommendedBook
 
     const unreadBooks = books.filter((b: Book) => b.status === 'unread');
 
-    return unreadBooks.reduce<RecommendedBook[]>((acc, book) => {
-        const pageScore = calculateScore(getPageCountScore(currentBook.pageCount), getPageCountScore(book.pageCount), 0.4);
-        const toneScore = calculateScore(getToneScore(currentBook.tone), getToneScore(book.tone), 0.4);
-        const epoqueScore = calculateScore(getPublicationDateScore(currentBook.publishedDate), getPublicationDateScore(book.publishedDate), 0.2);
+    const scoredBooks = unreadBooks.reduce<RecommendedBook[]>((acc, book) => {
+        const pageDiff = getScoreDiff(getPageCountScore(currentBook.pageCount), getPageCountScore(book.pageCount));
+        const toneDiff = getScoreDiff(getToneScore(currentBook.tone), getToneScore(book.tone));
+        const publicationDateDiff = getScoreDiff(getPublicationDateScore(currentBook.publishedDate), getPublicationDateScore(book.publishedDate));
+
+        const pageScore = getScore(pageDiff, 0.4);
+        const toneScore = getScore(toneDiff, 0.4);
+        const publicationDateScore = getScore(publicationDateDiff, 0.2);
         
         acc.push({
             ...book,
-            diversityScore: pageScore + toneScore + epoqueScore,
-            justification: '' 
+            diversityScore: pageScore + toneScore + publicationDateScore,
+            breakdown: { pageDiff, toneDiff, publicationDateDiff, pageScore, toneScore, publicationDateScore }
         });
         return acc;
-    }, []).sort((a, b) => b.diversityScore - a.diversityScore).slice(0, 3);
+    }, []);
+
+    return scoredBooks.sort((a, b) => b.diversityScore - a.diversityScore).slice(0, 3).map(book => {
+        return {
+            ...book,
+            justification: buildJustification(book.breakdown)
+        }
+    });
 }
 
-function calculateScore(currentScore: number | undefined, bookScore: number | undefined, weight: number): number {
-    if(currentScore === undefined || bookScore === undefined) return 0;
+function buildJustification(breakdown: ScoreBreakdown): string {
+    const { pageScore, toneScore, publicationDateScore, pageDiff, publicationDateDiff, toneDiff } = breakdown;
+    const justification = [
+        { score: pageScore, diff: pageDiff, text: pageDiff > 0 ? 'une lecture plus longue' : 'une lecture plus courte' },
+        { score: toneScore, diff: toneDiff, text: toneDiff > 0 ? 'un ton plus lumineux' : 'un ton plus sombre'},
+        { score: publicationDateScore, diff: publicationDateDiff, text: publicationDateDiff > 0 ? 'une époque plus ancienne' : 'une parution plus récente'}
+    ];
 
-    return weight * (Math.abs(currentScore - bookScore)) / 2;
+    return justification.filter(b => b.diff !== 0).sort((a, b) => b.score - a.score).slice(0,2).map(b => b.text).join(', ');
+}
+
+function getScoreDiff(currentScore: number | undefined, bookScore: number | undefined) {
+    if(currentScore === undefined || bookScore === undefined) return 0;
+    return bookScore - currentScore;
+}
+
+function getScore(score: number, weight: number): number {
+    return weight * Math.abs(score) / 2;
 }
 
 function getToneScore(tone: Book["tone"]): number | undefined {

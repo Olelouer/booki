@@ -3,6 +3,7 @@ import { Tablet } from "../ui/tablet"
 import { ProgressBar } from "../ui/progress-bar";
 import { Button } from "../ui/button";
 import { ImageAspect } from "../ui/image-aspect";
+import { AuthorsList } from "../lists/authors-list";
 
 type BookHighlightProps = {
     book: Book;
@@ -26,28 +27,8 @@ export function BookHightlightCard({ book, onUpdateBook }: BookHighlightProps) {
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col gap-1">
                         <span className="text-[13px] font-light text-accent tracking-wide uppercase">Reprise en dernier</span>
-                        <h2 className="text-2xl font-serif">{book.title}</h2>
-                        {book.authors && book.authors.length > 0 &&
-                            <div className="flex flex-wrap gap-1.5 items-center">
-                                <div className="flex flex-wrap gap-1.5">
-                                    {book.authors.slice(0, 2).map(author => {
-                                        return (
-                                            <span
-                                                key={author}
-                                                className="text-sm text-stone-700 after:content-['·'] after:ml-1.5 last:after:content-['']"
-                                            >
-                                                {author}
-                                            </span>
-                                        )
-                                    })}
-                                </div>
-                                {book.authors.length > 2 &&
-                                    <Tablet
-                                        text={`+${book.authors.length - 2}`}
-                                    />
-                                }
-                            </div>
-                        }
+                        <h2 className="text-2xl font-serif line-clamp-2">{book.title}</h2>
+                        <AuthorsList authors= {book.authors} />
                         {canCalculatePercentage &&
                             <>
                                 <ProgressBar 
