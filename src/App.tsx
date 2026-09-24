@@ -1,8 +1,8 @@
-import { Route, Routes } from 'react-router'
-import { Library } from './features/library/library'
-import { BookSearch } from './features/books-search/books-search'
-import { Layout } from './layouts/layout'
-import { SingleBook } from './features/single-book/single-book'
+import { Route, Routes } from "react-router";
+import { Library } from "./features/library/library";
+import { BookSearch } from "./features/books-search/books-search";
+import { Layout } from "./layouts/layout";
+import { SingleBook } from "./features/single-book/single-book";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
         <Route path="book/:id" element={<SingleBook />} />
       </Route>
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;

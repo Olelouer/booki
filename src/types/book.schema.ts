@@ -1,58 +1,65 @@
-import * as z from "zod"
+import * as z from "zod";
 
 export const TONE = ["dark", "neutral", "light"] as const;
-export const BOOK_STATUS = ["unread", "completed", "reading", "abandoned"] as const;
+export const BOOK_STATUS = [
+  "unread",
+  "completed",
+  "reading",
+  "abandoned",
+] as const;
 export type Tone = (typeof TONE)[number];
 export type BookStatus = (typeof BOOK_STATUS)[number];
 
 export const BookSchema = z.object({
-    id: z.uuid().default(() => crypto.randomUUID()),
-    googleId: z.string().optional().nullable(),
-    title: z.string(),
-    imageLinks: z.string().optional(),
-    infoLink: z.string().optional(),
-    categories: z.array(z.string()).optional(),
-    description: z.string().optional(),
-    subtitle: z.string().optional(),
-    authors: z.array(z.string()).optional(),
-    language: z.string().optional(),
-    pageCount: z.number().optional(),
-    currentPage: z.number().optional(),
-    publisher: z.string().optional(),
-    publishedDate: z.string().optional(),
-    tone: z.enum(TONE).optional().nullable(),
-    status: z.enum(BOOK_STATUS).optional().nullable(),
-    startedAt: z.iso.date().optional(),
-    updatedAt: z.iso.datetime().optional(),
-    lastActivityAt: z.iso.datetime().optional(),
-    finishedAt: z.iso.date().optional().nullable(),
+  id: z.uuid().default(() => crypto.randomUUID()),
+  googleId: z.string().optional().nullable(),
+  title: z.string(),
+  imageLinks: z.string().optional(),
+  infoLink: z.string().optional(),
+  categories: z.array(z.string()).optional(),
+  description: z.string().optional(),
+  subtitle: z.string().optional(),
+  authors: z.array(z.string()).optional(),
+  language: z.string().optional(),
+  pageCount: z.number().optional(),
+  currentPage: z.number().optional(),
+  publisher: z.string().optional(),
+  publishedDate: z.string().optional(),
+  tone: z.enum(TONE).optional().nullable(),
+  status: z.enum(BOOK_STATUS).optional().nullable(),
+  startedAt: z.iso.date().optional(),
+  updatedAt: z.iso.datetime().optional(),
+  lastActivityAt: z.iso.datetime().optional(),
+  finishedAt: z.iso.date().optional().nullable(),
 });
 
 export type Book = z.infer<typeof BookSchema>;
 
 export type RecommendedBook = Book & {
-    diversityScore: number;
-    breakdown: ScoreBreakdown;
-    justification?: string;
+  diversityScore: number;
+  breakdown: ScoreBreakdown;
+  justification?: string;
 };
 
 export type ScoreBreakdown = {
-    publicationDateDiff: number;
-    toneDiff: number;
-    pageDiff: number;
-    pageScore: number;
-    publicationDateScore: number;
-    toneScore: number;
-}
+  publicationDateDiff: number;
+  toneDiff: number;
+  pageDiff: number;
+  pageScore: number;
+  publicationDateScore: number;
+  toneScore: number;
+};
 
-export const LibraryBooksListSchema = z.array(
-    BookSchema.nullable()
-        .catch(ctx => {
-            console.warn(ctx.issues);
-            return null;
-        })).transform(books => books.filter((book): book is Book => book !== null));
+export const LibraryBooksListSchema = z
+  .array(
+    BookSchema.nullable().catch((ctx) => {
+      console.warn(ctx.issues);
+      return null;
+    }),
+  )
+  .transform((books) => books.filter((book): book is Book => book !== null));
 
 export type GetBooksResult = {
-    success: boolean;
-    library: Book[];
+  success: boolean;
+  library: Book[];
 };
